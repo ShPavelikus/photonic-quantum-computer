@@ -216,18 +216,45 @@ class PhotonicState:
         # Get full density matrix
         rho = self.density_matrix()
         
-        # Reshape to tensor form
-        shape = [2] * (2 * self.num_qubits)
-        rho_tensor = rho.reshape(shape)
+        # Determine kept qubits
+        kept_qubits = [i for i in range(self.num_qubits) if i not in traced_qubits]
         
-        # Trace out specified qubits
-        for qubit in sorted(traced_qubits, reverse=True):
-            # Trace over qubit
-            rho_tensor = np.trace(rho_tensor, axis1=qubit, axis2=self.num_qubits + qubit - len([q for q in traced_qubits if q < qubit]))
+        if not kept_qubits:
+            # All qubits traced out, return scalar
+            return np.array([[np.trace(rho)]])
         
-        # Reshape back to matrix
-        remaining_dim = 2 ** (self.num_qubits - len(traced_qubits))
-        return rho_tensor.reshape(remaining_dim, remaining_dim)
+        # Dimensions
+        dim_kept = 2 ** len(kept_qubits)
+        dim_traced = 2 ** len(traced_qubits)
+        
+        # Initialize reduced density matrix
+        rho_reduced = np.zeros((dim_kept, dim_kept), dtype=complex)
+        
+        # Sum over traced qubits
+        for i in range(dim_kept):
+            for j in range(dim_kept):
+                # Map reduced indices to full indices
+                for k in range(dim_traced):
+                    # Build full indices
+                    idx_i = 0
+                    idx_j = 0
+                    
+                    # Insert kept qubit values
+                    for pos, qubit in enumerate(kept_qubits):
+                        bit_i = (i >> pos) & 1
+                        bit_j = (j >> pos) & 1
+                        idx_i |= (bit_i << qubit)
+                        idx_j |= (bit_j << qubit)
+                    
+                    # Insert traced qubit values (same for both)
+                    for pos, qubit in enumerate(traced_qubits):
+                        bit = (k >> pos) & 1
+                        idx_i |= (bit << qubit)
+                        idx_j |= (bit << qubit)
+                    
+                    rho_reduced[i, j] += rho[idx_i, idx_j]
+        
+        return rho_reduced
     
     def __str__(self) -> str:
         """String representation of the state."""

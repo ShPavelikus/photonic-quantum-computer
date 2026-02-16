@@ -163,12 +163,12 @@ class TestMultiQubitStates:
     
     def test_partial_trace_two_qubit(self):
         """Test partial trace for two-qubit system."""
-        # Create product state |0⟩⊗|1⟩
+        # Create product state |01⟩ (qubit 0 is |1⟩, qubit 1 is |0⟩)
         state = PhotonicState.basis_state(2, 1)  # |01⟩
         
-        # Trace out second qubit should give |0⟩⟨0|
+        # Trace out qubit 1 should give |1⟩⟨1| for qubit 0
         rho_0 = state.partial_trace([1])
-        expected = np.array([[1, 0], [0, 0]])
+        expected = np.array([[0, 0], [0, 1]])  # |1⟩⟨1|
         assert np.allclose(rho_0, expected)
 
 

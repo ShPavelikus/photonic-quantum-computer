@@ -28,7 +28,7 @@ from .quantum_gates import (
     SWAPGate,
 )
 from .measurement import Measurement
-from .entanglement import create_bell_state, create_ghz_state, entanglement_entropy
+from .entanglement import create_bell_state, create_ghz_state, entanglement_entropy, concurrence
 from .circuits import QuantumCircuit
 
 __all__ = [
@@ -49,5 +49,6 @@ __all__ = [
     "create_bell_state",
     "create_ghz_state",
     "entanglement_entropy",
+    "concurrence",
     "QuantumCircuit",
 ]
