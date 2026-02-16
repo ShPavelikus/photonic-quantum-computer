@@ -9,8 +9,6 @@ This example demonstrates fundamental operations with photonic quantum states:
 """
 
 import numpy as np
-import sys
-sys.path.insert(0, '../src')
 
 from photonic_qc import PhotonicState, HadamardGate, PauliXGate, PauliZGate, Measurement
 

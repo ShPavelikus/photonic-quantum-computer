@@ -4,8 +4,6 @@ Tests for quantum gates.
 
 import pytest
 import numpy as np
-import sys
-sys.path.insert(0, '../src')
 
 from photonic_qc.quantum_state import PhotonicState
 from photonic_qc.quantum_gates import (

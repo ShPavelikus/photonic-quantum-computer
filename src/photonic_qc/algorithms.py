@@ -97,7 +97,11 @@ def deutsch_jozsa_algorithm(n: int, oracle: Callable[[QuantumCircuit], None]) ->
 
 def quantum_teleportation(state_to_teleport: PhotonicState) -> PhotonicState:
     """
-    Implement quantum teleportation protocol.
+    Implement quantum teleportation protocol (simplified demonstration).
+    
+    NOTE: This is a simplified demonstration showing the protocol structure.
+    A full implementation would require proper tensor product construction,
+    measurement handling, and classical communication simulation.
     
     Teleports a single-qubit state using an entangled Bell pair.
     
@@ -105,37 +109,21 @@ def quantum_teleportation(state_to_teleport: PhotonicState) -> PhotonicState:
         state_to_teleport: Single-qubit state to teleport
         
     Returns:
-        Teleported state
+        The original state (in a full implementation, this would be the teleported state)
     """
     if state_to_teleport.num_qubits != 1:
         raise ValueError("Can only teleport single-qubit states")
     
-    # Create 3-qubit system:
-    # qubit 0: state to teleport
-    # qubit 1: Alice's half of Bell pair
-    # qubit 2: Bob's half of Bell pair
-    circuit = QuantumCircuit(3)
+    # TODO: Full implementation would:
+    # 1. Create proper 3-qubit initial state: |ψ⟩ ⊗ |Φ+⟩
+    # 2. Apply Bell measurement on Alice's qubits
+    # 3. Simulate classical communication
+    # 4. Apply conditional corrections on Bob's qubit
+    # 5. Return the teleported state on Bob's qubit
     
-    # Create Bell pair between qubits 1 and 2
-    circuit.h(1)
-    circuit.cnot(1, 2)
-    
-    # Get initial 3-qubit state (state_to_teleport ⊗ Bell pair)
-    bell_pair = circuit.get_statevector()
-    
-    # Tensor product with state to teleport
-    full_state_vector = np.kron(state_to_teleport.state_vector, bell_pair.state_vector[2:4])
-    # Simplified: This needs proper implementation
-    
-    # Alice's operations
-    circuit = QuantumCircuit(3)
-    circuit.cnot(0, 1)
-    circuit.h(0)
-    
-    # Note: Full implementation would include measurement and classical communication
-    # This is a simplified version showing the structure
-    
-    return state_to_teleport  # Simplified return
+    # For demonstration purposes, return the original state
+    # This shows the protocol can be implemented but needs full tensor product handling
+    return state_to_teleport  # Simplified return for demonstration
 
 
 def superdense_coding(bit1: int, bit2: int) -> PhotonicState:

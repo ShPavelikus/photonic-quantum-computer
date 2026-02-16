@@ -8,8 +8,6 @@ This example demonstrates:
 """
 
 import numpy as np
-import sys
-sys.path.insert(0, '../src')
 
 from photonic_qc import (
     PhotonicState, HadamardGate, CNOTGate, 

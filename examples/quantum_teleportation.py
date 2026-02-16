@@ -10,8 +10,6 @@ This example demonstrates the quantum teleportation protocol:
 """
 
 import numpy as np
-import sys
-sys.path.insert(0, '../src')
 
 from photonic_qc import (
     PhotonicState, QuantumCircuit, 

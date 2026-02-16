@@ -100,13 +100,16 @@ class QuantumGate:
                     result = np.kron(result, np.eye(2))
             return result
         
-        # For multi-qubit gates (simplified for adjacent qubits)
+        # For multi-qubit gates
         elif self.num_qubits == 2:
             q1, q2 = sorted(target_qubits)
             if q2 - q1 != 1:
-                # For non-adjacent qubits, use SWAP gates (simplified implementation)
-                # This is a simplified version - full implementation would handle all cases
-                pass
+                # For non-adjacent qubits, full implementation would use SWAP gates
+                raise NotImplementedError(
+                    f"Multi-qubit gates on non-adjacent qubits not fully implemented. "
+                    f"Qubits {q1} and {q2} are not adjacent. "
+                    f"For now, only adjacent qubits are supported for 2-qubit gates."
+                )
             
             # Build matrix for adjacent qubits
             result = np.eye(1, dtype=complex)
