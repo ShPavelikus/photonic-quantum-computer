@@ -1,20 +1,21 @@
 # Photonic Quantum Computer
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![.NET 8](https://img.shields.io/badge/.NET-8.0-blue.svg)](https://dotnet.microsoft.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Полноценная теоретическая модель и симулятор фотонного квантового компьютера с математическим формализмом, реализацией квантовых гейтов и алгоритмов на Python.
+Полноценная теоретическая модель и симулятор фотонного квантового компьютера с математическим формализмом, реализацией квантовых гейтов и алгоритмов на C# (.NET 8).
 
 ## 🌟 Особенности
 
 - **Полная теоретическая база**: Математический формализм фотонных квантовых вычислений
-- **Симулятор на Python**: Высокопроизводительная реализация с использованием NumPy
+- **Симулятор на C# (.NET 8)**: Высокопроизводительная реализация с использованием MathNet.Numerics
 - **Квантовые гейты**: Однокубитные и многокубитные операции
-- **Квантовые алгоритмы**: Deutsch, Deutsch-Jozsa, квантовая телепортация
+- **Квантовые алгоритмы**: Deutsch, Deutsch-Jozsa, квантовая телепортация, Grover
 - **Запутанность**: Bell states, GHZ states, анализ запутанности
 - **Измерения**: Проекционные измерения в различных базисах
-- **Документация**: Подробное описание теории и аппаратной реализации
-- **Тесты**: Полное покрытие тестами всех компонентов
+- **Документация**: Подробное описание теории и аппаратной реализации с XML комментариями
+- **Тесты**: Полное покрытие тестами всех компонентов (xUnit)
+- **Исправлены критические баги**: Поддержка не-смежных кубитов, полная квантовая телепортация, обобщённый алгоритм Гровера
 
 ## 📚 Теоретические основы
 
@@ -44,146 +45,151 @@
 git clone https://github.com/ShPavelikus/photonic-quantum-computer.git
 cd photonic-quantum-computer
 
-# Установить зависимости
-pip install -r requirements.txt
+# Собрать проект
+dotnet build
 
-# Установить пакет
-pip install -e .
+# Запустить тесты
+dotnet test
+
+# Запустить примеры
+dotnet run --project examples/PhotonicQuantumComputer.Examples/PhotonicQuantumComputer.Examples.csproj
 ```
 
 ### Первая программа
 
-```python
-from photonic_qc import PhotonicState, HadamardGate, CNOTGate, create_bell_state
+```csharp
+using PhotonicQuantumComputer;
 
-# Создать состояние |0⟩
-state = PhotonicState.zero_state(1)
+// Создать состояние |0⟩
+var state = PhotonicState.ZeroState(1);
 
-# Применить гейт Адамара
-h = HadamardGate()
-superposition = h.apply(state)
-print(f"Superposition: {superposition}")
+// Применить гейт Адамара
+var h = new HadamardGate();
+var superposition = h.Apply(state, new[] { 0 });
+Console.WriteLine($"Superposition: {superposition}");
 
-# Создать Bell state
-bell = create_bell_state("phi_plus")
-print(f"Bell state: {bell}")
+// Создать Bell state
+var bell = Entanglement.CreateBellState("phi_plus");
+Console.WriteLine($"Bell state: {bell}");
 ```
 
 ## 📖 Примеры
 
 ### Базовые операции
 
-```python
-from photonic_qc import PhotonicState, HadamardGate, PauliXGate
+```csharp
+using PhotonicQuantumComputer;
 
-# Создание состояний
-state_0 = PhotonicState.zero_state(1)  # |0⟩
-state_1 = PhotonicState.one_state(1)   # |1⟩
-superpos = PhotonicState.superposition(1)  # |+⟩
+// Создание состояний
+var state0 = PhotonicState.ZeroState(1);  // |0⟩
+var state1 = PhotonicState.OneState(1);   // |1⟩
+var superpos = PhotonicState.Superposition(1);  // |+⟩
 
-# Применение гейтов
-h_gate = HadamardGate()
-x_gate = PauliXGate()
+// Применение гейтов
+var hGate = new HadamardGate();
+var xGate = new PauliXGate();
 
-# H|0⟩ = |+⟩
-plus_state = h_gate.apply(state_0)
+// H|0⟩ = |+⟩
+var plusState = hGate.Apply(state0, new[] { 0 });
 
-# X|0⟩ = |1⟩
-flipped = x_gate.apply(state_0)
+// X|0⟩ = |1⟩
+var flipped = xGate.Apply(state0, new[] { 0 });
 ```
 
 ### Квантовые схемы
 
-```python
-from photonic_qc import QuantumCircuit
+```csharp
+using PhotonicQuantumComputer;
 
-# Создать схему с 2 кубитами
-circuit = QuantumCircuit(2)
+// Создать схему с 2 кубитами
+var circuit = new QuantumCircuit(2);
 
-# Добавить гейты
-circuit.h(0)           # Hadamard на первом кубите
-circuit.cnot(0, 1)     # CNOT между кубитами
-circuit.measure_all()  # Измерить все кубиты
+// Добавить гейты
+circuit.H(0);           // Hadamard на первом кубите
+circuit.Cnot(0, 1);     // CNOT между кубитами
+circuit.MeasureAll();   // Измерить все кубиты
 
-# Запустить схему
-results = circuit.run(shots=1000)
-print(results)
+// Запустить схему
+var results = circuit.Run(shots: 1000);
+Console.WriteLine(results);
 ```
 
 ### Bell states и запутанность
 
-```python
-from photonic_qc import create_bell_state, entanglement_entropy, concurrence
+```csharp
+using PhotonicQuantumComputer;
 
-# Создать Bell state
-bell = create_bell_state("phi_plus")  # |Φ+⟩ = (|00⟩ + |11⟩)/√2
+// Создать Bell state
+var bell = Entanglement.CreateBellState("phi_plus");  // |Φ+⟩ = (|00⟩ + |11⟩)/√2
 
-# Анализ запутанности
-entropy = entanglement_entropy(bell, [0])
-print(f"Entanglement entropy: {entropy}")  # 1.0 (максимальная)
+// Анализ запутанности
+var entropy = Entanglement.EntanglementEntropy(bell, new List<int> { 0 });
+Console.WriteLine($"Entanglement entropy: {entropy}");  // 1.0 (максимальная)
 
-C = concurrence(bell)
-print(f"Concurrence: {C}")  # 1.0 (максимальная запутанность)
+var c = Entanglement.Concurrence(bell);
+Console.WriteLine($"Concurrence: {c}");  // 1.0 (максимальная запутанность)
 ```
 
 ### Квантовые алгоритмы
 
-```python
-from photonic_qc.algorithms import deutsch_algorithm
+```csharp
+using PhotonicQuantumComputer;
 
-# Определить oracle для константной функции
-def constant_oracle(circuit):
-    pass  # Ничего не делать
+// Определить oracle для константной функции
+void ConstantOracle(QuantumCircuit circuit)
+{
+    // Ничего не делать
+}
 
-# Запустить алгоритм Дойча
-result = deutsch_algorithm(constant_oracle)
-print(f"Function is {result}")  # "constant"
+// Запустить алгоритм Дойча
+var result = Algorithms.DeutschAlgorithm(ConstantOracle);
+Console.WriteLine($"Function is {result}");  // "constant"
 ```
 
 ## 🏗️ Архитектура проекта
 
 ```
 photonic-quantum-computer/
-├── docs/                      # Документация
-│   ├── theory/               # Теоретические основы
+├── PhotonicQuantumComputer.sln            # Solution file
+├── LICENSE                                 # MIT License
+├── README.md                              # This file
+├── docs/                                  # Documentation
+│   ├── theory/                           # Theoretical foundations
 │   │   ├── mathematical-formalism.md
 │   │   ├── quantum-gates.md
 │   │   └── quantum-processes.md
-│   └── hardware/             # Описание оборудования
+│   └── hardware/                         # Hardware description
 │       └── equipment-overview.md
-├── src/photonic_qc/          # Основной код симулятора
-│   ├── __init__.py
-│   ├── quantum_state.py      # Квантовые состояния
-│   ├── quantum_gates.py      # Квантовые гейты
-│   ├── measurement.py        # Измерения
-│   ├── entanglement.py       # Операции запутанности
-│   ├── circuits.py           # Квантовые схемы
-│   └── algorithms.py         # Квантовые алгоритмы
-├── examples/                 # Примеры использования
-│   ├── basic_operations.py
-│   ├── bell_states.py
-│   ├── quantum_teleportation.py
-│   └── deutsch_algorithm.py
-├── tests/                    # Тесты
-│   ├── test_quantum_state.py
-│   ├── test_quantum_gates.py
-│   └── test_entanglement.py
-├── requirements.txt          # Зависимости
-├── setup.py                  # Настройки пакета
-└── README.md                 # Этот файл
+├── src/PhotonicQuantumComputer/          # Main simulator code
+│   ├── PhotonicQuantumComputer.csproj    # Project file
+│   ├── QuantumState.cs                   # Quantum states
+│   ├── QuantumGates.cs                   # Quantum gates
+│   ├── Measurement.cs                    # Measurements
+│   ├── Entanglement.cs                   # Entanglement operations
+│   ├── QuantumCircuit.cs                 # Quantum circuits
+│   └── Algorithms.cs                     # Quantum algorithms
+├── examples/PhotonicQuantumComputer.Examples/  # Usage examples
+│   ├── PhotonicQuantumComputer.Examples.csproj
+│   └── Program.cs                        # Consolidated examples
+├── tests/PhotonicQuantumComputer.Tests/  # Tests (xUnit)
+│   ├── PhotonicQuantumComputer.Tests.csproj
+│   ├── QuantumStateTests.cs
+│   ├── QuantumGatesTests.cs
+│   └── AlgorithmsTests.cs
+└── .gitignore                            # Git ignore file
 ```
 
 ## 🧪 Запуск тестов
 
 ```bash
-# Установить pytest (если еще не установлен)
-pip install pytest
-
 # Запустить все тесты
-pytest tests/ -v
+dotnet test
+
+# Запустить тесты с подробным выводом
+dotnet test --verbosity detailed
 
 # Запустить конкретный тест
-pytest tests/test_quantum_state.py -v
+dotnet test --filter "QuantumStateTests"
 ```
 
 ## 📊 Примеры работы
@@ -191,7 +197,7 @@ pytest tests/test_quantum_state.py -v
 ### Пример 1: Создание суперпозиции
 
 ```bash
-python examples/basic_operations.py
+dotnet run --project examples/PhotonicQuantumComputer.Examples/PhotonicQuantumComputer.Examples.csproj
 ```
 
 Вывод:
