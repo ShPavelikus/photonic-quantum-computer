@@ -1,56 +1,21 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# .NET build outputs
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.DotSettings.user
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
 
-# C extensions
-*.so
-
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# PyInstaller
-*.manifest
-*.spec
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-
-# Virtual environments
-venv/
-env/
-ENV/
-env.bak/
-venv.bak/
+# Test results
+TestResults/
+*.trx
+*.coveragexml
 
 # IDEs
 .vscode/
@@ -62,14 +27,3 @@ venv.bak/
 # OS
 .DS_Store
 Thumbs.db
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# pyenv
-.python-version
-
-# MyPy
-.mypy_cache/
-.dmypy.json
-dmypy.json

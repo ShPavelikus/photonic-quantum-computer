@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/examples/">
+    <Project Path="examples/PhotonicQuantumComputer.Examples/PhotonicQuantumComputer.Examples.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/PhotonicQuantumComputer/PhotonicQuantumComputer.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PhotonicQuantumComputer.Tests/PhotonicQuantumComputer.Tests.csproj" />
+  </Folder>
+</Solution>
