@@ -102,35 +102,29 @@ public static class Algorithms
         }
 
         // Step 1: Create 3-qubit initial state: |ψ⟩ ⊗ |00⟩
-        // Qubit 0: state to teleport (Alice's qubit)
-        // Qubit 1: Alice's half of Bell pair
-        // Qubit 2: Bob's half of Bell pair
-        var circuit = new QuantumCircuit(3);
+        // Start with |000⟩ and prepare qubit 0 in state |ψ⟩
+        var zeroState2 = PhotonicState.ZeroState(2);
+        var initialState = TensorProductStates(stateToTeleport, zeroState2);
 
-        // Create Bell pair on qubits 1 and 2 (|Φ+⟩ = (|00⟩ + |11⟩)/√2)
+        // Step 2: Create Bell pair on qubits 1 and 2
+        var circuit = new QuantumCircuit(3);
         circuit.H(1);
         circuit.Cnot(1, 2);
+        
+        var stateWithBellPair = circuit.GetStatevector(initialState);
 
-        // Get the Bell pair state
-        var bellPairState = circuit.GetStatevector();
-
-        // Tensor product: |ψ⟩ ⊗ |Φ+⟩
-        // Create combined initial state
-        var initialState = TensorProductStates(stateToTeleport, bellPairState);
-
-        // Step 2: Apply Bell measurement on Alice's qubits (0 and 1)
+        // Step 3: Apply Bell measurement on Alice's qubits (0 and 1)
         circuit = new QuantumCircuit(3);
         circuit.Cnot(0, 1);  // CNOT from qubit 0 to qubit 1
         circuit.H(0);        // Hadamard on qubit 0
+        
+        var stateAfterBellBasis = circuit.GetStatevector(stateWithBellPair);
 
-        // Apply the Bell measurement circuit
-        var stateAfterBellBasis = circuit.GetStatevector(initialState);
-
-        // Step 3: Measure qubits 0 and 1 to get classical bits
+        // Step 4: Measure qubits 0 and 1 to get classical bits
         var (bit0, stateAfterMeasure0) = Measurement.MeasureComputationalBasis(stateAfterBellBasis, 0);
         var (bit1, stateAfterMeasure1) = Measurement.MeasureComputationalBasis(stateAfterMeasure0, 1);
 
-        // Step 4: Apply conditional corrections on Bob's qubit (qubit 2) based on measurement results
+        // Step 5: Apply conditional corrections on Bob's qubit (qubit 2) based on measurement results
         var correctionCircuit = new QuantumCircuit(3);
         
         // If bit1 == 1, apply X gate to qubit 2
@@ -147,11 +141,10 @@ public static class Algorithms
 
         var finalState = correctionCircuit.GetStatevector(stateAfterMeasure1);
 
-        // Step 5: Extract Bob's qubit (qubit 2) - partial trace over qubits 0 and 1
+        // Step 6: Extract Bob's qubit (qubit 2) - partial trace over qubits 0 and 1
         var bobsReducedDensityMatrix = finalState.PartialTrace(new List<int> { 0, 1 });
 
         // Convert reduced density matrix back to state vector (for pure states)
-        // For a pure state, the reduced density matrix will have one dominant eigenvalue
         var bobsStateVector = ExtractStateFromReducedDensityMatrix(bobsReducedDensityMatrix);
 
         return new PhotonicState(bobsStateVector, normalize: true);
